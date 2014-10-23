@@ -26,19 +26,10 @@ public abstract class Container {
     private String contextPath = "/";
     private int port = 8080;
     private int maxWorkers = -1;
-    private Class<? extends Application> application;
+    private Class<? extends Application> applicationClass;
 
-    public Container() {
-    }
-
-    public Container(Class<? extends Application> application) {
-        this.application = application;
-    }
-
-    public static Container create(Class<? extends Application> application) {
-        Container container = ServiceLoader.load(Container.class).iterator().next();
-        container.application = application;
-        return container;
+    public static Container create() {
+        return ServiceLoader.load(Container.class).iterator().next();
     }
 
     public String getContextPath() {
@@ -68,13 +59,34 @@ public abstract class Container {
         return this;
     }
 
-    public Class<? extends Application> getApplication() {
-        return application;
+    public Class<? extends Application> getApplicationClass() {
+        return applicationClass;
     }
 
-    public abstract Container start() throws Exception;
+    public Container setApplicationClass(Class<? extends Application> applicationClass) {
+        this.applicationClass = applicationClass;
+        return this;
+    }
 
-    public abstract Container stop() throws Exception;
+    public final void start() throws Exception {
+        if (isStopped()) {
+            if (!Port.isFree(getPort())) {
+                throw new IllegalStateException("Port already used: " + getPort());
+            }
+            doStart();
+        }
+    }
+
+    protected abstract void doStart() throws Exception;
+
+    public final void stop() throws Exception {
+        if (!isRunning()) {
+            doStop();
+            applicationClass = null;
+        }
+    }
+
+    protected abstract void doStop() throws Exception;
 
     public abstract boolean isRunning();
 

@@ -33,8 +33,8 @@ and
 
 Then choose between these two implementation:
 
-* [Jetty](module.jersey-container-jetty)
-* [Undertow](module.jersey-container-undertow)
+* [Jetty](/module.jersey-container-jetty)
+* [Undertow](/module.jersey-container-undertow)
 
 Example
 -------

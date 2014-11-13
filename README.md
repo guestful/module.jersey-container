@@ -1,5 +1,5 @@
-Jersey Container API
-====================
+[Guestful OSS](/) - Jersey Container API
+========================================
 
 Discover cotainer implementation from classpath and loads your JAX-RS resource.
 

@@ -32,7 +32,16 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h1>
-<a id="guestful--module--jersey-container-api" class="anchor" href="#guestful--module--jersey-container-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>Guestful :: Module :: Jersey Container API</h1>
+<a id="jersey-container-api" class="anchor" href="#jersey-container-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>Jersey Container API</h1>
+
+<p>Discover cotainer implementation from classpath and loads your JAX-RS resource.</p>
+
+<p>Checkout last version <a href="https://bintray.com/guestful/maven/guestful.module.jersey-container/view">here</a></p>
+
+<p><a href="https://drone.io/github.com/guestful/module.jersey-container/latest"><img src="https://drone.io/github.com/guestful/module.jersey-container/status.png" alt="Build Status"></a></p>
+
+<h2>
+<a id="setup" class="anchor" href="#setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setup</h2>
 
 <p>Add in your POM:</p>
 
@@ -53,9 +62,44 @@
 &lt;/dependency&gt;
 </code></pre>
 
-<p>Checkout last version <a href="https://bintray.com/guestful/maven/guestful.module.jersey-container/view">here</a></p>
+<p>Then choose between these two implementation:</p>
 
-<p><a href="https://drone.io/github.com/guestful/module.jersey-container/latest"><img src="https://drone.io/github.com/guestful/module.jersey-container/status.png" alt="Build Status"></a></p>
+<ul>
+<li><a href="module.jersey-container-jetty">Jetty</a></li>
+<li><a href="module.jersey-container-undertow">Undertow</a></li>
+</ul>
+
+<h2>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h2>
+
+<p><code>GApplication</code> is a subclass of <code>ResourceConfig</code>.</p>
+
+<div class="highlight highlight-java"><pre><span class="pl-s">class</span> <span class="pl-entc">Main</span> <span class="pl-s">extends</span> <span class="pl-eoi">GApplication</span> {
+
+    <span class="pl-s">@Override</span>
+    <span class="pl-s">void</span> <span class="pl-enf">configure</span>(<span class="pl-s">Container</span> <span class="pl-v">container</span>) {
+        container
+            .setPort(<span class="pl-cn">8080</span>)
+            .setMaxWorkers(<span class="pl-cn">50</span>) <span class="pl-c"><span class="pl-pdc">//</span> determine max. concurrent request threads (i.e. 50 is a max for Heroku)</span>
+            .setContextPath(<span class="pl-s1"><span class="pl-pds">'</span>/api<span class="pl-pds">'</span></span>)
+    }
+
+    <span class="pl-s">@Override</span>
+    <span class="pl-s">void</span> <span class="pl-enf">initialize</span>() {
+        <span class="pl-c"><span class="pl-pdc">//</span>register your resources here</span>
+        registerClasses(
+            <span class="pl-s">RootResource</span>,
+            <span class="pl-s">MonitoringResource</span>
+            <span class="pl-c"><span class="pl-pdc">//</span> etc.</span>
+        )
+    }
+
+    <span class="pl-c"><span class="pl-pdc">//</span> start your app</span>
+    <span class="pl-s">public</span> <span class="pl-s">static</span> <span class="pl-s">void</span> <span class="pl-enf">main</span>(<span class="pl-s">String</span>... <span class="pl-v">args</span>) <span class="pl-s">throws</span> <span class="pl-s">Exception</span> {
+        <span class="pl-k">new</span> <span class="pl-s">Main</span>()<span class="pl-ko">.</span>run(args);
+    }
+
+}</pre></div>
       </section>
     </div>
 
